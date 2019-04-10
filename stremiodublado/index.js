@@ -10,10 +10,10 @@ var express = require('express');
 var ourImdbIds2 = "";
 var ourImdbIds3 = [];
 /*
- cd C:\Users\Mateus\Dropbox\Aplicativos\Heroku\stremiodublado
+ cd C:\completo
  git add .
  git commit -am "make it better"
- git push heroku master
+ git push
  */
 //carregar ("http://hidratorrent.com/dragon-ball-super-3-temporada-completa-torrent");
 
@@ -328,7 +328,7 @@ if (module.parent) {
     }).on("listening", function ()
     {
         console.log(server.address());
-        
+
     }).listen(7000);
 
 }
@@ -350,6 +350,7 @@ methods["stream.find"] = function (args, callback) {
     sqlite.runAsync("SELECT * FROM registros where imdb='" + key + "'", function (rows) {
         var dataset_temp = [];
 
+        console.log(rows);
         if (rows != null) {
             rows.forEach(function (row) {
                 try {
