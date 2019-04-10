@@ -349,22 +349,26 @@ methods["stream.find"] = function (args, callback) {
 
     console.log("SELECT * FROM registros where imdb='" + key + "'");
     db.query("SELECT * FROM registros where imdb='" + key + "'", function (error, rows) {
+        
         var dataset_temp = [];
         if (error) {
             console.log(error);
         } else {
             rows.forEach(function (row) {
+                //console.log(row);
                 try {
+                    var magMap = fromMagnetMap(row[2], row[3], row[4]);
                     if (dataset_temp != null) {
-                        if (dataset_temp.indexOf(fromMagnetMap(row.magnet, row.mapa, row.nome)) > -1) {
-                            console.log("Existe:", row.nome);
+                        if (dataset_temp.indexOf(magMap) > -1) {
+                            console.log("Existe:", row[4]);
                         } else {
-                            dataset_temp.push(fromMagnetMap(row.magnet, row.mapa, row.nome));
+                            dataset_temp.push(magMap);
                         }
                     } else {
-                        dataset_temp = [fromMagnetMap(row.magnet, row.mapa, row.nome)];
+                        dataset_temp = [magMap];
                     }
                 } catch (e) {
+                    l(e);
                 }
 
             });
