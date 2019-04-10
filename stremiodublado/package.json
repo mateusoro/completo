@@ -15,6 +15,7 @@
     "tableify": "^1.1.0",
     "torrent-name-parser": "^0.6.5",
     "video-name-parser": "^1.4.6"
+        
   },
   "devDependencies": {},
   "scripts": {
