@@ -1,5 +1,6 @@
-git clone https://github.com/mateusoro/completo.git ../completo
-cd stremiodublado
+//git clone https://github.com/mateusoro/completo.git ../completo
+git pull
+cd ./stremiodublado/
 npm i
-cd ../stremiobusca
+cd ../stremiobusca/
 npm i
