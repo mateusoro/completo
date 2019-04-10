@@ -1,3 +1,5 @@
+git stash save --keep-index
+git stash drop
 git pull
 cd ./stremiodublado/
 npm i
