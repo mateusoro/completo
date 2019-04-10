@@ -3,8 +3,9 @@ var Stremio = require("stremio-addons");
 var magnet = require("magnet-uri");
 const fs = require("fs");
 const cheerio = require('cheerio');
-var sqlite = require('sqlite-sync');
-sqlite.connect('linhas.sqlite3');
+var dblite = require('dblite'),
+        db = dblite('linhas.sqlite3');
+
 var request = require('sync-request');
 var express = require('express');
 var ourImdbIds2 = "";
@@ -347,11 +348,11 @@ methods["stream.find"] = function (args, callback) {
     }).join(" ");
 
     console.log("SELECT * FROM registros where imdb='" + key + "'");
-    sqlite.runAsync("SELECT * FROM registros where imdb='" + key + "'", function (rows) {
+    db.query("SELECT * FROM registros where imdb='" + key + "'", function (error, rows) {
         var dataset_temp = [];
-
-        console.log(rows);
-        if (rows != null) {
+        if (error) {
+            console.log(error);
+        } else {
             rows.forEach(function (row) {
                 try {
                     if (dataset_temp != null) {
@@ -467,12 +468,12 @@ function append_dataset() {
         var mag = campos[2];
         var map = campos[3];
         var nome = campos[4];
-        sqlite.run("INSERT INTO registros VALUES (null,'" + imdb + "','" + mag + "','" + map + "','" + nome + "')");
+        db.query("INSERT INTO registros VALUES (null,'" + imdb + "','" + mag + "','" + map + "','" + nome + "')");
 
 
     });
 
-    sqlite.run('DELETE FROM registros WHERE id NOT IN (SELECT min(id) FROM registros GROUP BY imdb, magnet, mapa)');
+    db.query('DELETE FROM registros WHERE id NOT IN (SELECT min(id) FROM registros GROUP BY imdb, magnet, mapa)');
     console.log("Fim");
 
 
