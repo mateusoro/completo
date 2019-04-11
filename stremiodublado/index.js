@@ -328,7 +328,8 @@ if (module.parent) {
     }).on("listening", function ()
     {
         console.log(server.address());
-
+        sqlite.run("SELECT * FROM registros where imdb='1'", function (rows) {});
+    
     }).listen(7000);
 
 }
@@ -350,7 +351,7 @@ methods["stream.find"] = function (args, callback) {
     sqlite.run("SELECT * FROM registros where imdb='" + key + "'", function (rows) {
         var dataset_temp = [];
 
-        console.log(rows);
+        //console.log(rows);
         if (rows != null) {
             rows.forEach(function (row) {
                 try {
