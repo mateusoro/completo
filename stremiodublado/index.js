@@ -3,9 +3,8 @@ var Stremio = require("stremio-addons");
 var magnet = require("magnet-uri");
 const fs = require("fs");
 const cheerio = require('cheerio');
-var dblite = require('dblite'),
-        db = dblite('linhas.sqlite3');
-
+var sqlite = require('sqlite-sync');
+sqlite.connect('linhas.sqlite3');
 var request = require('sync-request');
 var express = require('express');
 var ourImdbIds2 = "";
@@ -348,27 +347,23 @@ methods["stream.find"] = function (args, callback) {
     }).join(" ");
 
     console.log("SELECT * FROM registros where imdb='" + key + "'");
-    db.query("SELECT * FROM registros where imdb='" + key + "'", function (error, rows) {
-        
+    sqlite.run("SELECT * FROM registros where imdb='" + key + "'", function (rows) {
         var dataset_temp = [];
-        if (error) {
-            console.log(error);
-        } else {
+
+        console.log(rows);
+        if (rows != null) {
             rows.forEach(function (row) {
-                //console.log(row);
                 try {
-                    var magMap = fromMagnetMap(row[2], row[3], row[4]);
                     if (dataset_temp != null) {
-                        if (dataset_temp.indexOf(magMap) > -1) {
-                            console.log("Existe:", row[4]);
+                        if (dataset_temp.indexOf(fromMagnetMap(row.magnet, row.mapa, row.nome)) > -1) {
+                            console.log("Existe:", row.nome);
                         } else {
-                            dataset_temp.push(magMap);
+                            dataset_temp.push(fromMagnetMap(row.magnet, row.mapa, row.nome));
                         }
                     } else {
-                        dataset_temp = [magMap];
+                        dataset_temp = [fromMagnetMap(row.magnet, row.mapa, row.nome)];
                     }
                 } catch (e) {
-                    l(e);
                 }
 
             });
@@ -472,12 +467,12 @@ function append_dataset() {
         var mag = campos[2];
         var map = campos[3];
         var nome = campos[4];
-        db.query("INSERT INTO registros VALUES (null,'" + imdb + "','" + mag + "','" + map + "','" + nome + "')");
+        sqlite.run("INSERT INTO registros VALUES (null,'" + imdb + "','" + mag + "','" + map + "','" + nome + "')");
 
 
     });
 
-    db.query('DELETE FROM registros WHERE id NOT IN (SELECT min(id) FROM registros GROUP BY imdb, magnet, mapa)');
+    sqlite.run('DELETE FROM registros WHERE id NOT IN (SELECT min(id) FROM registros GROUP BY imdb, magnet, mapa)');
     console.log("Fim");
 
 
