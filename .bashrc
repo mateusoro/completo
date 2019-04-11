@@ -1,5 +1,7 @@
-node completo/stremiodublado/index.js & 
-cd completo/stremiobusca 
+cd completo/stremiodublado
+node index.js & 
+cd ..
+cd stremiobusca 
 #node index.js & 
 cd ..
 cd ..
