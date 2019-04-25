@@ -10,10 +10,10 @@ var express = require('express');
 var ourImdbIds2 = "";
 var ourImdbIds3 = [];
 /*
- cd C:\Users\Mateus\Dropbox\Aplicativos\Heroku\stremiodublado
+ cd C:\completo\
  git add .
- git commit -am "make it better"
- git push heroku master
+ git commit
+ git push
  */
 //carregar ("http://hidratorrent.com/dragon-ball-super-3-temporada-completa-torrent");
 

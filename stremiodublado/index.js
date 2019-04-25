@@ -30,7 +30,7 @@ var manifest = {
 
     "name": "Filmes e Séries Dublados",
     "description": "Filmes e Séries Dublados",
-    endpoint: "http://stremiodublado.serveo.net/stremio/v1",
+    endpoint: "http://localhost/stremio/v1",
 
     // Properties that determine when Stremio picks this add-on
     "types": ["movie", "series"], // your add-on will be preferred for those content types
@@ -330,7 +330,7 @@ if (module.parent) {
         console.log(server.address());
         sqlite.run("SELECT * FROM registros where imdb='1'", function (rows) {});
     
-    }).listen(7000);
+    }).listen(80);
 
 }
 
