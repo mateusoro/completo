@@ -14,7 +14,7 @@ const builder = new addonBuilder({
 
 // takes function(args), returns Promise
 builder.defineStreamHandler(function (args) {
-    if (args.type === 'movie' && args.id === 'tt1254207') {
+    if (args.type === 'movie' && args.id === 'tt3076658') {
         // serve one stream to big buck bunny
         // return addonSDK.Stream({ url: '...' })
         const stream = {url: 'http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_30fps_normal.mp4'}
