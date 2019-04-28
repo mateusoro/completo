@@ -12,6 +12,7 @@
     "shelljs": "^0.8.3",
     "stremio-addon-sdk": "^1.2.0",
     "stremio-addons": "^2.8.14",
+    "sync-mysql": "^3.0.1",
     "sync-request": "^6.1.0",
     "tableify": "^1.1.0",
     "torrent-name-parser": "^0.6.5",

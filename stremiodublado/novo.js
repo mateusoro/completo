@@ -1,28 +1,97 @@
-const {addonBuilder, serveHTTP} = require('stremio-addon-sdk')
-var Promise = require('promise');
+const {addonBuilder, serveHTTP} = require('stremio-addon-sdk');
+var magnet = require("magnet-uri");
+var fs = require('fs');
+const mysql = require('sync-mysql');
+
+//https://v3-cinemeta.strem.io/meta/' + type + '/' + imdbId + '.json
+
 const builder = new addonBuilder({
     id: 'stremiodublado',
     version: '1.0.0',
     name: 'Dublado',
     catalogs: [],
-    // Properties that determine when Stremio picks this add-on
-    // this means your add-on will be used for streams of the type movie
     resources: ['stream'],
-    types: ['movie'],
+    types: ['movie', 'series'],
     idPrefixes: ['tt']
 })
 
-// takes function(args), returns Promise
+var host = 'localhost';
+var database = 'registros';
+
+//var exec = require('child_process').exec(' mysqldump -u root -proot registros > registros.sql');
+//var exec = require('child_process').exec(' mysql -u root -proot -h localhost -D registros --binary-mode -o  < registros.sql');
+
+
+var connection = new mysql({
+    host: host,
+    port: 3306,
+    user: 'root',
+    password: 'root',
+    database: database
+});
+
+
 builder.defineStreamHandler(function (args) {
-    if (args.type === 'movie' && args.id === 'tt3076658') {
-        // serve one stream to big buck bunny
-        // return addonSDK.Stream({ url: '...' })
-        const stream = {url: 'http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_30fps_normal.mp4'}
-        return Promise.resolve({streams: [stream]})
-    } else {
-        // otherwise return no streams
-        return Promise.resolve({streams: []})
+
+    var key = args.id.replace(':', ' ').replace(':', ' ');
+    var dataset_temp = [];
+    var results = connection.query("SELECT * FROM registros where imdb='" + key + "'");
+
+    results.forEach(function (row) {
+        //console.log(row);
+        //console.log(row.mapa);
+        try {
+            var converte = fromMagnetMap(row.magnet, row.mapa, row.nome);
+            if (dataset_temp != null) {
+                if (dataset_temp.indexOf(converte) > -1) {
+                    console.log("Existe:", row.nome);
+                } else {
+                    dataset_temp.push(converte);
+                }
+            } else {
+                dataset_temp = [converte];
+            }
+        } catch (e) {
+        }
+
+    });
+    //console.log({streams: dataset_temp});
+    return Promise.resolve({streams: dataset_temp});
+
+});
+
+function fromMagnetMap(uri, m, nome) {
+    //console.log(uri);
+    var parsed = magnet.decode(uri);
+    // console.log(uri);
+    var infoHash = parsed.infoHash.toLowerCase();
+    nome = nome.toUpperCase();
+
+    var tags = "";
+    if (nome.match(/720P/i))
+        tags = tags + ("720p ");
+    if (nome.match(/1080P/i))
+        tags = tags + ("1080p ");
+    if (nome.match(/LEGENDADO/i))
+        tags = tags + ("LEGENDADO ");
+    if (nome.match(/DUBLADO/i))
+        tags = tags + ("DUBLADO ");
+    if (nome.match(/DUBLADA/i))
+        tags = tags + ("DUBLADA ");
+    if (nome.match(/DUAL/i))
+        tags = tags + ("DUAL ÁUDIO ");
+    if (nome.match(/4K/i))
+        tags = tags + ("4K ");
+    if (nome.match(/2160P/i))
+        tags = tags + ("2160p ");
+    if (nome.match(/UHD/i))
+        tags = tags + ("UHD ");
+
+    return {
+        infoHash: infoHash,
+        title: tags,
+        fileIdx: m,
     }
-})
+}
 
 serveHTTP(builder.getInterface(), {port: 7000});
