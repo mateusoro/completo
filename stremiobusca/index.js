@@ -117,6 +117,7 @@ app.get('/lancamentosOndeEuBaixo', function (req, res) {
 
 app.listen(7001, function () {
     console.log('Rodando em 7001');
+    
 });
 
 
@@ -126,7 +127,7 @@ var dataset_hashs = [];
 //dataset.push(["Tipo","IMDB","Magnet","Map","Arquivo","Título", "Seed", "Imagem"]);
 dataset_links.push(["Tipo", "Link"]);
 dataset_hashs.push(["hash", "magnet", "imdb", "img"]);
-lista("https://ondeeubaixo.com.br/lancamentos-", 1, 2);
+
 function append_dataset() {
     l('append_dataset');
     //DELETE FROM registros WHERE id NOT IN (SELECT min(id) FROM registros GROUP BY imdb, magnet, mapa);
@@ -367,7 +368,9 @@ function carregar_dados_torrent(data) {
                             filme[2] = mag;
                             filme[3] = map;
                             filme[4] = ar.trim();
-                            dataset.push(filme);
+                            //dataset.push(filme);
+                            connection.query("INSERT INTO registros VALUES (null,'" + id + "','" + mag + "','" + map + "','" + ar.trim() + "','')");
+
                             l("Episodio adicionado: E:" + eps + " T:" + temp + " " + title);
                             //append(mag, id, temp, eps, map, ar);
                             //append(JSON.stringify(fromMagnetMap(mag, index-1)));
@@ -387,7 +390,9 @@ function carregar_dados_torrent(data) {
                                 filme[3] = map;
                                 filme[4] = ar.trim();
                                 l("Filme adicionado: " + title);
-                                dataset.push(filme);
+                                //dataset.push(filme);
+                                 connection.query("INSERT INTO registros VALUES (null,'" + id + "','" + mag + "','" + map + "','" + ar.trim() + "','')");
+
                             }
 
                         }
