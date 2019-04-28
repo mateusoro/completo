@@ -1,4 +1,4 @@
-const {addonBuilder, serveHTTP} = require('stremio-addon-sdk');
+const {addonBuilder, serveHTTP, getRouter, publishToCentral } = require('stremio-addon-sdk');
 var magnet = require("magnet-uri");
 var fs = require('fs');
 const mysql = require('sync-mysql');
@@ -10,7 +10,7 @@ var options = {
 };
 
 // Create a service (the app object is just a callback).
-var app = express();
+var app = express(getRouter);
 https.createServer(options, app).listen(443);
 
 //https://v3-cinemeta.strem.io/meta/' + type + '/' + imdbId + '.json
