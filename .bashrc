@@ -10,4 +10,4 @@ cd ~/completo
 mysqld_safe -u root &
 sshd &
 ssh -R stremiobusca:80:localhost:7001 serveo.net -o StrictHostKeyChecking=no &
-am start -n com.stremio/.MainActivity
+#am start -n com.stremio/.MainActivity
