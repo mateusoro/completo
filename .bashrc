@@ -11,7 +11,7 @@ cd /data/data/com.termux/files/home/completo
 mysqld_safe -u root &
 sshd &
 ssh -R stremiobusca:80:localhost:7001 serveo.net -o StrictHostKeyChecking=no &
-ssh -R stremiodublado:80:localhost:7000 serveo.net -o StrictHostKeyChecking=no &
+ssh -R stremiodublado:80:localhost:7005 serveo.net -o StrictHostKeyChecking=no &
 export SSHPASS=root
 #sshpass -e ssh -L 443:127.0.0.1:7000 root@localhost -p 8022
 #am start -n com.stremio/.MainActivity
