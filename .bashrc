@@ -13,3 +13,4 @@ sshd &
 ssh -R stremiobusca:80:localhost:7001 serveo.net -o StrictHostKeyChecking=no &
 ssh -R stremiodublado:80:localhost:7000 serveo.net -o StrictHostKeyChecking=no &
 #am start -n com.stremio/.MainActivity
+
