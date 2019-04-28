@@ -1,11 +1,14 @@
+#!/bin/bash
 git stash save --keep-index
 git stash drop
 git pull
-cd ./stremiodublado/
-npm i
-cd ../stremiobusca/
-npm i
-cd ..
-cp .bashrc ../
-cd ..
+if [$1 = '-n'] 
+then 
+	cd ~/completo/stremiodublado/
+	npm i
+	cd ~/completo/stremiobusca/
+	npm i
+fi; 
+cp ~/completo/.bashrc ~/
+cd ~/
 sh .bashrc
