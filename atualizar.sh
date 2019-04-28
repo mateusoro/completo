@@ -5,3 +5,4 @@ git pull
 cp /data/data/com.termux/files/home/completo/.bashrc /data/data/com.termux/files/home/
 cd /data/data/com.termux/files/home/
 sh .bashrc
+

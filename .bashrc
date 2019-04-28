@@ -7,7 +7,7 @@ cd /data/data/com.termux/files/home/completo/stremiodublado
 node novo.js & 
 cd /data/data/com.termux/files/home/completo/stremiobusca 
 node index.js & 
-cd ~/data/data/com.termux/files/home/completo
+cd /data/data/com.termux/files/home/completo
 mysqld_safe -u root &
 sshd &
 ssh -R stremiobusca:80:localhost:7001 serveo.net -o StrictHostKeyChecking=no &
