@@ -1,4 +1,5 @@
 #!/bin/bash
+cd ~/completo/stremiodublado/
 mysql -u root
 CREATE USER 'root2'@'localhost' IDENTIFIED BY 'root';
 GRANT ALL PRIVILEGES ON *.* TO 'root2'@'localhost' WITH GRANT OPTION;
@@ -18,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `registros`.`registros` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=32286 DEFAULT CHARSET=latin1;
+source modelo.sql;
 exit;
 
 
