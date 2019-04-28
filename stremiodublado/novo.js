@@ -107,4 +107,4 @@ function fromMagnetMap(uri, m, nome) {
     }
 }
 
-serveHTTP(builder.getInterface(), {port: 7000});
+serveHTTP(builder.getInterface(), {port: 7005});
