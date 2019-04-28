@@ -27,7 +27,6 @@ git.isGit(path, function (exists) {
         //      untracked: 1,
         //      stashes: 0 }
     });
-     
 });
 
 /*
