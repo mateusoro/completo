@@ -12,8 +12,8 @@ var options = {
 // Create a service (the app object is just a callback).
 var app = express();
 app.get('*',function(req,res){  
-    console.log('https://192.168.0.102/'+req.url);
-    res.redirect('https://192.168.0.102/'+req.url);
+    console.log('http://192.168.0.102/'+req.url);
+    res.redirect('http://192.168.0.102:7000'+req.url);
 })
 https.createServer(options, app).listen(443);
 
