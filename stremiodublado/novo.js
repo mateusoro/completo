@@ -19,7 +19,7 @@ var host = 'localhost';
 var database = 'registros';
 
 //var exec = require('child_process').exec(' mysqldump -u root2 -proot registros > registros.sql');
-//var exec = require('child_process').exec(' mysql -u root2 -proot -h localhost -D registros --binary-mode -o  < registros.sql');
+//var exec = require('child_process').exec('mysql -u root2 -proot -h localhost -D registros --binary-mode -o  < modelo.sql');
 
 
 var connection = new mysql({

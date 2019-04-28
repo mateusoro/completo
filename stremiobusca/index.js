@@ -3,12 +3,11 @@ var Stremio = require("stremio-addons");
 var magnet = require("magnet-uri");
 const fs = require("fs");
 const cheerio = require('cheerio');
-var sqlite = require('sqlite-sync');
-sqlite.connect('../stremiodublado/linhas.sqlite3');
 var request = require('sync-request');
 var express = require('express');
 var ourImdbIds2 = "";
 var ourImdbIds3 = [];
+const mysql = require('sync-mysql');
 /*
  cd C:\Users\Mateus\Dropbox\Aplicativos\Heroku\stremiodublado
  git add .
@@ -21,16 +20,21 @@ var ourImdbIds3 = [];
 //var cmd = 'ssh -R stremiobusca:80:localhost:7001 serveo.net -o StrictHostKeyChecking=no';
 //shell.exec(cmd,{async:true});
 
-var server = require("http").createServer(function (req, res) {
+var host = 'localhost';
+var database = 'registros';
 
-    var q = url.parse(req.url, true);
-    var qdata = q.query;
-    var urll = q.pathname;
-    var query = qdata;
+var connection = new mysql({
+    host: host,
+    port: 3306,
+    user: 'root2',
+    password: 'root',
+    database: database
+});
+var app = express();
 
-    if (urll == "/comando") {
-        /*res.set('Content-Type', 'text/html');
-         res.end("\
+app.get('/', function (req, res) {
+    res.set('Content-Type', 'text/html');
+    res.end("\
          Comandos: <br>\n\
          /lista?q=http://hidratorrent.com/maisbaixados-filmes<br>\n\
          /lista?q=http://hidratorrent.com/lancamentos-filmes<br>\n\
@@ -44,86 +48,77 @@ var server = require("http").createServer(function (req, res) {
          URL: <input type='text' id='texto'><br>\n\
          IMDB:  <input type='text' id='imdb'><br><br>\n\
          <a href onclick=\"window.open('/lista?q='+document.getElementById('texto').value, '_blank');\" >Carregar Lista</a><br>\n\
-         <a href onclick=\"window.open('/buscarHidra?q='+document.getElementById('texto').value, '_blank');\" >Carregar Busca</a><br>\n\
+         <a href onclick=\"window.open('/buscar?q='+document.getElementById('texto').value, '_blank');\" >Carregar Busca</a><br>\n\
          <a href onclick=\"window.open('/lancamentosHidra', '_blank');\" >Carregar Lançamentos</a><br>\n\
          <a href onclick=\"window.open('/link?q='+document.getElementById('texto').value, '_blank');\" >Carregar Link</a><br>\n\
          <a href onclick=\"window.open('/link?i='+document.getElementById('imdb').value+'&q='+document.getElementById('texto').value, '_blank');\" >Carregar Link + IMDB</a><br>\n\
          <br><br>\n\
-         <a href='https://dashboard.heroku.com/apps/nodestremio/logs' target='_blank'>Log</a><br>\n\
-         <br>\n\
-         */
-        // res.send('');
+         <br>\n");
+});
+app.get('/buscar', function (req, res) {
+    res.set('Content-Type', 'text/html');
+    res.end("Carregando: " + req.query.q);
+    dataset = [];
+    dataset_links = [];
+    dataset_hashs = [];
+    dataset_links.push(["Tipo", "Link"]);
+    dataset_hashs.push(["hash", "magnet", "imdb", "img"]);
+    console.log(req.query.q);
+    carregarBusca(req.query.q);
+});
+app.get('/lista', function (req, res) {
+    res.set('Content-Type', 'text/html');
+    res.end("Carregando: " + req.query.q);
+    dataset = [];
+    dataset_links = [];
+    dataset_hashs = [];
+    dataset_links.push(["Tipo", "Link"]);
+    dataset_hashs.push(["hash", "magnet", "imdb", "img"]);
+    lista(req.query.q + "-", 1, 3);
+});
+app.get('/link', function (req, res) {
+    res.set('Content-Type', 'text/html');
+    res.end("Carregando: " + req.query.q);
+    dataset = [];
+    dataset_links = [];
+    dataset_hashs = [];
+    dataset_links.push(["Tipo", "Link"]);
+    dataset_hashs.push(["hash", "magnet", "imdb", "img"]);
+    dataset_links.push(req.query.q);
+    var im = req.query.i;
+    if (im) {
+        retorno_carregar_links_imdb(im);
+    } else {
+        retorno_carregar_links();
     }
-    if (urll == "/buscarHidra") {
+    retorno_carregar_hashs();
+    append_dataset();
+});
+app.get('/lancamentosHidra', function (req, res) {
+    res.set('Content-Type', 'text/html');
+    res.end("Carregando: Lançamentos");
+    dataset = [];
+    dataset_links = [];
+    dataset_hashs = [];
+    dataset_links.push(["Tipo", "Link"]);
+    dataset_hashs.push(["hash", "magnet", "imdb", "img"]);
+    lista("http://hidratorrent.com/lancamentos-", 1, 3);
+});
+app.get('/lancamentosOndeEuBaixo', function (req, res) {
+    res.set('Content-Type', 'text/html');
+    res.end("Carregando: Lançamentos");
+    dataset = [];
+    dataset_links = [];
+    dataset_hashs = [];
+    dataset_links.push(["Tipo", "Link"]);
+    dataset_hashs.push(["hash", "magnet", "imdb", "img"]);
+    lista("https://ondeeubaixo.com.br/lancamentos-", 1, 3);
+});
 
-        dataset = [];
-        dataset_links = [];
-        dataset_hashs = [];
-        dataset_links.push(["Tipo", "Link"]);
-        dataset_hashs.push(["hash", "magnet", "imdb", "img"]);
-        console.log(query.q);
-        carregarBusca(query.q);
+app.listen(7001, function () {
+    console.log('Rodando em 7001');
+});
 
-    }
-    if (url == "/lista") {
-
-        dataset = [];
-        dataset_links = [];
-        dataset_hashs = [];
-        dataset_links.push(["Tipo", "Link"]);
-        dataset_hashs.push(["hash", "magnet", "imdb", "img"]);
-        console.log(query.q);
-        lista(query.q + "-", 1, 3);
-
-    }
-    if (urll == "/link") {
-
-        dataset = [];
-        dataset_links = [];
-        dataset_hashs = [];
-        dataset_links.push(["Tipo", "Link"]);
-        dataset_hashs.push(["hash", "magnet", "imdb", "img"]);
-        console.log(query.q);
-        dataset_links.push(query.q);
-        var im = query.i;
-        if (im) {
-            retorno_carregar_links_imdb(im);
-        } else {
-            retorno_carregar_links();
-        }
-        retorno_carregar_hashs();
-        append_dataset();
-    }
-    if (urll == "/lancamentosHidra") {
-
-        dataset = [];
-        dataset_links = [];
-        dataset_hashs = [];
-        dataset_links.push(["Tipo", "Link"]);
-        dataset_hashs.push(["hash", "magnet", "imdb", "img"]);
-
-        l('Lançamentos');
-        lista("http://hidratorrent.com/lancamentos-", 1, 3);
-
-    }
-    if (urll == "/lancamentosOndeEuBaixo") {
-
-        dataset = [];
-        dataset_links = [];
-        dataset_hashs = [];
-        dataset_links.push(["Tipo", "Link"]);
-        dataset_hashs.push(["hash", "magnet", "imdb", "img"]);
-        l('Lançamentos');
-        lista("https://ondeeubaixo.com.br/lancamentos-", 1, 3);
-
-
-    }
-
-}).on("listening", function ()
-{
-    console.log(server.address());
-
-}).listen(7001);
 
 var dataset = [];
 var dataset_links = [];
@@ -131,7 +126,7 @@ var dataset_hashs = [];
 //dataset.push(["Tipo","IMDB","Magnet","Map","Arquivo","Título", "Seed", "Imagem"]);
 dataset_links.push(["Tipo", "Link"]);
 dataset_hashs.push(["hash", "magnet", "imdb", "img"]);
-
+lista("https://ondeeubaixo.com.br/lancamentos-", 1, 2);
 function append_dataset() {
     l('append_dataset');
     //DELETE FROM registros WHERE id NOT IN (SELECT min(id) FROM registros GROUP BY imdb, magnet, mapa);
@@ -143,12 +138,12 @@ function append_dataset() {
         var mag = campos[2];
         var map = campos[3];
         var nome = campos[4];
-        sqlite.run("INSERT INTO registros VALUES (null,'" + imdb + "','" + mag + "','" + map + "','" + nome + "')");
+        connection.query("INSERT INTO registros VALUES (null,'" + imdb + "','" + mag + "','" + map + "','" + nome + "','')");
 
 
     });
 
-    sqlite.run('DELETE FROM registros WHERE id NOT IN (SELECT min(id) FROM registros GROUP BY imdb, magnet, mapa)');
+    connection.query('DELETE FROM registros WHERE id NOT IN (SELECT min(id) FROM registros GROUP BY imdb, magnet, mapa)');
     console.log("Fim");
 
 
@@ -288,14 +283,18 @@ function retorno_carregar_links_imdb(im) {
 function retorno_carregar_hashs() {
 
     l('retorno_carregar_hashs');
+    var temp = [];
     for (i1 = 1; i1 < dataset_hashs.length; i1++) {
 
         var r = dataset_hashs[i1];
-        var p = "https://www.skytorrents.lol/torrent/" + r[0];
-        l(p);
-        var res = request('GET', p);
-        r[4] = res.getBody('utf8');
-        carregar_dados_imdb(r);
+        if (temp.indexOf(r[0]) < 0) {
+            temp.push(r[0]);
+            var p = "https://www.skytorrents.lol/torrent/" + r[0];
+            l(p);
+            var res = request('GET', p);
+            r[4] = res.getBody('utf8');
+            carregar_dados_imdb(r);
+        }
     }
 }
 function carregar_dados_imdb(data) {
