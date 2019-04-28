@@ -3,11 +3,6 @@ var magnet = require("magnet-uri");
 var fs = require('fs');
 const mysql = require('sync-mysql');
 var express = require('express');
-var https = require('https');
-var options = {
-    key: fs.readFileSync('server.key'),
-    cert: fs.readFileSync('server.cert')
-};
 
 // Create a service (the app object is just a callback).
 /*

@@ -8,6 +8,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'root2'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 DROP DATABASE IF EXISTS `registros`;
 CREATE DATABASE IF NOT EXISTS `registros`;
+use registros;
 DROP TABLE IF EXISTS `registros`.`registros`;
 CREATE TABLE IF NOT EXISTS `registros`.`registros` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
