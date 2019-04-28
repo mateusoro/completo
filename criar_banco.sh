@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ~/completo/stremiodublado/
+cd /data/data/com.termux/files/home/completo/stremiodublado/
 mysql -u root
 CREATE USER 'root2'@'localhost' IDENTIFIED BY 'root';
 GRANT ALL PRIVILEGES ON *.* TO 'root2'@'localhost' WITH GRANT OPTION;

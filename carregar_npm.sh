@@ -1,6 +1,6 @@
 #!/bin/bash
-cd ~/completo/stremiodublado/
+cd /data/data/com.termux/files/home/completo/stremiodublado/
 npm i
-cd ~/completo/stremiobusca/
+cd /data/data/com.termux/files/home/completo/stremiobusca/
 npm i
 
