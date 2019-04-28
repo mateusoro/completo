@@ -13,19 +13,19 @@ const builder = new addonBuilder({
     resources: ['stream'],
     types: ['movie', 'series'],
     idPrefixes: ['tt']
-})
+});
 
 var host = 'localhost';
 var database = 'registros';
 
-//var exec = require('child_process').exec(' mysqldump -u root -proot registros > registros.sql');
-//var exec = require('child_process').exec(' mysql -u root -proot -h localhost -D registros --binary-mode -o  < registros.sql');
+//var exec = require('child_process').exec(' mysqldump -u root2 -proot registros > registros.sql');
+//var exec = require('child_process').exec(' mysql -u root2 -proot -h localhost -D registros --binary-mode -o  < registros.sql');
 
 
 var connection = new mysql({
     host: host,
     port: 3306,
-    user: 'root',
+    user: 'root2',
     password: 'root',
     database: database
 });
@@ -90,7 +90,7 @@ function fromMagnetMap(uri, m, nome) {
     return {
         infoHash: infoHash,
         title: tags,
-        fileIdx: m,
+        fileIdx: m
     }
 }
 
