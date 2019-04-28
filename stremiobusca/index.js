@@ -8,11 +8,10 @@ var express = require('express');
 var ourImdbIds2 = "";
 var ourImdbIds3 = [];
 const mysql = require('sync-mysql');
-
 var git = require('git-state');
 
 var path = __dirname.replace('stremiobusca', '');
-console.log(path);
+//console.log(path);
 
 git.isGit(path, function (exists) {
     if (!exists) {
@@ -28,15 +27,7 @@ git.isGit(path, function (exists) {
         //      untracked: 1,
         //      stashes: 0 }
     });
-    git.dirty(path, function (err, result) {
-        if (err)
-            throw err
-        console.log(result) // => { branch: 'master',
-        //      ahead: 0,
-        //      dirty: 9,
-        //      untracked: 1,
-        //      stashes: 0 }
-    });
+     
 });
 
 /*
