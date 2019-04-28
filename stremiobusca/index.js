@@ -36,7 +36,7 @@ git.isGit(path, function (exists) {
  git push heroku master
  */
 //carregar ("http://hidratorrent.com/dragon-ball-super-3-temporada-completa-torrent");
-
+//ettttt
 //var shell = require('shelljs');
 //var cmd = 'ssh -R stremiobusca:80:localhost:7001 serveo.net -o StrictHostKeyChecking=no';
 //shell.exec(cmd,{async:true});
