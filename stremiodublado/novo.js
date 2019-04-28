@@ -10,7 +10,11 @@ var options = {
 };
 
 // Create a service (the app object is just a callback).
-var app = express(getRouter);
+var app = express();
+app.get('*',function(req,res){  
+    console.log('https://192.168.0.102/'+req.url);
+    res.redirect('https://192.168.0.102/'+req.url);
+})
 https.createServer(options, app).listen(443);
 
 //https://v3-cinemeta.strem.io/meta/' + type + '/' + imdbId + '.json
