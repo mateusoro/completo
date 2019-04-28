@@ -2,7 +2,8 @@
 git stash save --keep-index
 git stash drop
 git pull
-if [$1 = '-n'] 
+echo $1
+if [$1 = 'npm'] 
 then 
 	cd ~/completo/stremiodublado/
 	npm i
