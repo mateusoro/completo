@@ -17,7 +17,7 @@ require('simple-git')(path)
         .pull((err, update) => {
             console.log(update);
             if (update && update.summary.changes) {
-                require('child_process').exec('sh ../.bashrc');
+                require('child_process').exec('sh ../.bashrc &');
             }
         });
 
