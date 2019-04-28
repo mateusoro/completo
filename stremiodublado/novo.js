@@ -3,6 +3,16 @@ var magnet = require("magnet-uri");
 var fs = require('fs');
 const mysql = require('sync-mysql');
 
+var https = require('https');
+var options = {
+  key: fs.readFileSync('server.key'),
+  cert: fs.readFileSync('server.cert')
+};
+
+// Create a service (the app object is just a callback).
+var app = express();
+https.createServer(options, app).listen(443);
+
 //https://v3-cinemeta.strem.io/meta/' + type + '/' + imdbId + '.json
 
 const builder = new addonBuilder({
