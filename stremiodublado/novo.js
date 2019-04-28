@@ -10,6 +10,7 @@ var options = {
 };
 
 // Create a service (the app object is just a callback).
+/*
 var app = express();
 app.get('*', function (req, res) {
     console.log('http://' + host + ':7000' + req.url);
@@ -19,7 +20,7 @@ app.get('*', function (req, res) {
 
 })
 https.createServer(options, app).listen(443);
-
+*/
 //https://v3-cinemeta.strem.io/meta/' + type + '/' + imdbId + '.json
 
 const builder = new addonBuilder({
