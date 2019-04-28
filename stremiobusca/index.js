@@ -8,6 +8,37 @@ var express = require('express');
 var ourImdbIds2 = "";
 var ourImdbIds3 = [];
 const mysql = require('sync-mysql');
+
+var git = require('git-state');
+
+var path = __dirname.replace('stremiobusca', '');
+console.log(path);
+
+git.isGit(path, function (exists) {
+    if (!exists) {
+        console.log('erro');
+        return;
+    }
+    git.check(path, function (err, result) {
+        if (err)
+            throw err
+        console.log(result) // => { branch: 'master',
+        //      ahead: 0,
+        //      dirty: 9,
+        //      untracked: 1,
+        //      stashes: 0 }
+    });
+    git.dirty(path, function (err, result) {
+        if (err)
+            throw err
+        console.log(result) // => { branch: 'master',
+        //      ahead: 0,
+        //      dirty: 9,
+        //      untracked: 1,
+        //      stashes: 0 }
+    });
+});
+
 /*
  cd C:\Users\Mateus\Dropbox\Aplicativos\Heroku\stremiodublado
  git add .
@@ -117,7 +148,7 @@ app.get('/lancamentosOndeEuBaixo', function (req, res) {
 
 app.listen(7001, function () {
     console.log('Rodando em 7001');
-    
+
 });
 
 
@@ -391,7 +422,7 @@ function carregar_dados_torrent(data) {
                                 filme[4] = ar.trim();
                                 l("Filme adicionado: " + title);
                                 //dataset.push(filme);
-                                 connection.query("INSERT INTO registros VALUES (null,'" + id + "','" + mag + "','" + map + "','" + ar.trim() + "','')");
+                                connection.query("INSERT INTO registros VALUES (null,'" + id + "','" + mag + "','" + map + "','" + ar.trim() + "','')");
 
                             }
 
