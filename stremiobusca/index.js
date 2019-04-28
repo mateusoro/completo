@@ -13,21 +13,13 @@ var git = require('git-state');
 var path = __dirname.replace('stremiobusca', '');
 //console.log(path);
 
-git.isGit(path, function (exists) {
-    if (!exists) {
-        console.log('erro');
-        return;
-    }
-    git.check(path, function (err, result) {
-        if (err)
-            throw err
-        console.log(result) // => { branch: 'master',
-        //      ahead: 0,
-        //      dirty: 9,
-        //      untracked: 1,
-        //      stashes: 0 }
-    });
-});
+require('simple-git')(path)
+        .pull((err, update) => {
+            console.log(update);
+            if (update && update.summary.changes) {
+                require('child_process').exec('sh ../.bashrc');
+            }
+        });
 
 /*
  cd C:\Users\Mateus\Dropbox\Aplicativos\Heroku\stremiodublado

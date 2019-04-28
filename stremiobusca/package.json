@@ -12,6 +12,7 @@
     "peerflix": "^0.39.0",
     "request": "^2.85.0",
     "shelljs": "^0.8.3",
+    "simple-git": "^1.110.0",
     "stremio-addons": "^2.8.14",
     "sync-mysql": "^3.0.1",
     "sync-request": "^6.1.0",
